@@ -7,12 +7,18 @@ using JPS.Data;
 
 namespace JPS.Util
 {
-    static class Util
+    static class Utils
     {
+        public static void Assert(bool pred, string message)
+        {
+            if (!pred)
+            {
+                throw new Exception(message);
+            }
+        }
         public static List<Point> Bresenham(Point p0, Point p1)
         {
             var limit = Heuristics.Manhattan(p0, p1);
-            Console.WriteLine(limit);
             var line = new List<Point>();
             var x0 = p0.x;
             var y0 = p0.y;
@@ -53,17 +59,11 @@ namespace JPS.Util
             }
 
             throw new Exception("programmer error");
-
-
         }
 
         public static List<Point> ExpandPath(List<Point> path)
         {
             var expanded = new List<List<Point>>();
-            /*if (path.Count <= 2)
-            {
-                return path;
-            }*/
 
             for (int k = 0; k < path.Count - 1; k += 1)
             {
@@ -72,7 +72,6 @@ namespace JPS.Util
                 var interpolated = Bresenham(p0, p1);
                 expanded.Add(interpolated.Take(interpolated.Count - 1).ToList());
             }
-            //expanded.Add(new List<Point>(path[path.Count - 1]));
             return expanded.SelectMany(x => x).ToList();
         }
     }

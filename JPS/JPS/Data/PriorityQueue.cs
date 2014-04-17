@@ -21,7 +21,6 @@ namespace JPS.Data
             if (rep.Count > 0)
             {
                 var result = rep.Min;
-                Console.WriteLine("popping " + result);
                 rep.Remove(result);
                 return result;
             }

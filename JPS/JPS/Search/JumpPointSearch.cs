@@ -15,7 +15,7 @@ namespace JPS.Search
         private Func<Point,Point, double> heuristic;
         private Func<int, int, Point> p = (i, j) => new Point(i, j);
         private Node endNode;
-        class NodeComparer : System.Collections.Generic.IComparer<Node> 
+        class NodeComparer : IComparer<Node> 
         {
             public int Compare(Node x, Node y)
             {
@@ -61,12 +61,11 @@ namespace JPS.Search
 
                 if (node == endNode)
                 {
-                    return Util.Util.ExpandPath(retracePath(endNode));
+                    return Util.Utils.ExpandPath(retracePath(endNode));
                 }
                 identifySuccessors(node);
 
             }
-            Console.WriteLine("No path found");
             return new List<Point>();
         }
 
@@ -75,7 +74,6 @@ namespace JPS.Search
             var x = node.x;
             var y = node.y;
             var neighbors = findNeighbors(node);
-            Console.WriteLine(neighbors.Count);
             foreach (var n in neighbors) 
             {
                 var jumpPoint = jump(n.x, n.y, x, y);
@@ -239,7 +237,6 @@ namespace JPS.Search
             }
             else
             {
-                Console.WriteLine("here");
                 for (int i = -1; i <= 1; i += 1) 
                 {
                     for (int j = -1; j <= 1; j += 1)
