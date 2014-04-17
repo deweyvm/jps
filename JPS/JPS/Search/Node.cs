@@ -28,5 +28,17 @@ namespace JPS.Search
             this.x = x;
             this.y = y;
         }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is Node)) return false;
+            Node other = (Node)obj;
+            return other.x == x && other.y == y;
+        }
+
+        public override int GetHashCode()
+        {
+            return x + (y >> 16);
+        }
     }
 }
