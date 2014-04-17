@@ -12,6 +12,7 @@ namespace JPS.Search
         private Array2d<Node> nodes;
         private Array2d<bool> solid;
         private PriorityQueue<Node> openList;
+        private HashSet<Node> closedList;
         private Func<Point,Point, double> heuristic;
         private Func<int, int, Point> p = (i, j) => new Point(i, j);
         private Node endNode;
@@ -48,8 +49,8 @@ namespace JPS.Search
             this.endNode = nodes.get(end.x, end.y);
 
             this.openList = new PriorityQueue<Node>(new NodeComparer());
+            this.closedList = new HashSet<Node>();
             openList.Push(startNode);
-            startNode.opened = true;
 
 
         }
@@ -59,7 +60,7 @@ namespace JPS.Search
             while (!openList.IsEmpty())
             {
                 var node = openList.Pop();
-                node.closed = true;
+                closedList.Add(node);
 
                 if (node.Equals(endNode))
                 {
@@ -83,23 +84,24 @@ namespace JPS.Search
                     var jx = point.x;
                     var jy = point.y;
                     var jumpNode = nodes.get(jx, jy);
-                    if (!jumpNode.closed)
+                    if (!closedList.Contains(jumpNode))
                     {
                         var d = Heuristics.Euclidean(node.pos, jumpNode.pos);
                         var ng = node.g + d;
-                        if (!jumpNode.opened || ng < jumpNode.g)
+                        var inOpen = openList.Contains(jumpNode);
+                        if (!inOpen || ng < jumpNode.g)
                         {
                             jumpNode.g = ng;
                             jumpNode.h = heuristic(jumpNode.pos, endNode.pos);
                             jumpNode.parent = node.Some();
 
-                            if (!jumpNode.opened)
+                            if (!inOpen)
                             {
                                 openList.Push(jumpNode);
-                                jumpNode.opened = true;
                             }
                             else
                             {
+                                //todo, always call update
                                 openList.Update(jumpNode);
                             }
                         }

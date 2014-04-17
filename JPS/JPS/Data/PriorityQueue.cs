@@ -35,6 +35,11 @@ namespace JPS.Data
             rep.Add(elt);
         }
 
+        public bool Contains(T elt)
+        {
+            return rep.Contains(elt);
+        }
+
         public void Update(T elt)
         {
             rep.Remove(elt);

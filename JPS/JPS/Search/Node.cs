@@ -10,8 +10,6 @@ namespace JPS.Search
     {
         public double g;
         public double h;
-        public bool closed;
-        public bool opened;
         public Option<Node> parent = Option<Node>.None;
         public readonly int x;
         public readonly int y;
