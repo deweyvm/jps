@@ -120,7 +120,7 @@ namespace JPS.Search
             var pt = p(x, y).Some();
             if (!isWalkable(x, y)) return Option<Point>.None;
 
-            if (nodes.get(x, y).pos.Equals(endNode.pos)) return pt;
+            if (endNode.pos.Equals(new Point(x, y))) return pt;
 
             if (dx != 0 && dy != 0)
             {
