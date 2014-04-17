@@ -5,24 +5,28 @@ using System.Text;
 
 namespace LNP.Data
 {
-    class Queue<T>
+    class PriorityQueue<T>
     {
         private SortedSet<T> rep;
-        public Queue(IComparer<T> comp)
+        public PriorityQueue(IComparer<T> comp)
         {
             this.rep =  new SortedSet<T>(comp);
         }
-        public Option<T> Pop()
+        public bool IsEmpty()
+        {
+            return rep.Count == 0;
+        }
+        public T Pop()
         {
             if (rep.Count > 0)
             {
                 var result = rep.Min;
                 rep.Remove(result);
-                return result.Some();
+                return result;
             }
             else
             {
-                return Option<T>.None;
+                throw new NotSupportedException();
             }
         }
 

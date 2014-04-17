@@ -45,10 +45,12 @@
   <ItemGroup>
     <Compile Include="Data\Array2d.cs" />
     <Compile Include="Data\Option.cs" />
-    <Compile Include="Data\Queue.cs" />
+    <Compile Include="Data\PriorityQueue.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Search\LNPSearch.cs" />
+    <Compile Include="Search\Node.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="walls.txt">

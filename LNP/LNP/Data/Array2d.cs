@@ -11,15 +11,15 @@ namespace LNP.Data
         public readonly int rows;
         private T[,] raw;
 
-        public Option<T> get(int i, int j)
+        public T get(int i, int j)
         {
             if (i < 0 || i > cols - 1 || j < 0 || j > rows - 1)
             {
-                return new Option<T>(raw[i, j]);
+                return raw[i, j];
             }
             else
             {
-                return Option<T>.None;
+                throw new IndexOutOfRangeException();
             }
         }
 
@@ -30,7 +30,12 @@ namespace LNP.Data
             this.raw = raw;
         }
 
-        public static Array2d<T> Tabulate(int cols, int rows, Func<int, int, T> f)
+        public Array2d<K> Map<K>(Func<int, int, T, K> f)
+        {
+            return Tabulate<K>(cols, rows, (i, j) => f(i, j, get(i, j)));
+        }
+
+        public static Array2d<T> Tabulate<T>(int cols, int rows, Func<int, int, T> f)
         {
             T[,] raw = new T[cols,rows];
             foreach (int i in cols.Range()) 
