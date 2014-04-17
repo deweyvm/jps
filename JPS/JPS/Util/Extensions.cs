@@ -28,5 +28,14 @@ namespace JPS
             }
             return dict[key];
         }
+
+        public static Option<T> TryGet<K, T>(this IDictionary<K, T> dict, K key)
+        {
+            if (!dict.ContainsKey(key))
+            {
+                return Option<T>.None;
+            }
+            return dict[key].Some();
+        }
     }
 }

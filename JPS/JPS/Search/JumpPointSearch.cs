@@ -14,6 +14,7 @@ namespace JPS.Search
         private PriorityQueue<Node> openList;
         private HashSet<Node> closedList;
         private Dictionary<Node, double> gscore;
+        private Dictionary<Node, Node> parentMap;
         private Func<Point,Point, double> heuristic;
         private Func<int, int, Point> p = (i, j) => new Point(i, j);
         private Node endNode;
@@ -29,11 +30,11 @@ namespace JPS.Search
         {
             var result = new List<Node>();
             var current = end.Some();
-            while (current.Exists(c => c.parent.HasValue))
+            while (current.Exists(c => parentMap.TryGet(c).HasValue))
             {
                 current.ForEach(c => {
                     result.Add(c);
-                    current = c.parent;
+                    current = parentMap.TryGet(c);
                 });
                 
             }
@@ -52,6 +53,7 @@ namespace JPS.Search
             this.openList = new PriorityQueue<Node>(new NodeComparer());
             this.closedList = new HashSet<Node>();
             this.gscore = new Dictionary<Node, double>();
+            this.parentMap = new Dictionary<Node, Node>();
             openList.Push(startNode);
 
 
@@ -96,7 +98,7 @@ namespace JPS.Search
                         {
                             gscore[jumpNode] = ng;
                             jumpNode.f = ng + heuristic(jumpNode.pos, endNode.pos);
-                            jumpNode.parent = node.Some();
+                            parentMap[jumpNode] = node;
 
                             if (!inOpen)
                             {
@@ -185,7 +187,7 @@ namespace JPS.Search
 
         private List<Point> findNeighbors(Node node)
         {
-            var parent = node.parent;
+            var parent = parentMap.TryGet(node);
             var x = node.x;
             var y = node.y;
             var neighbors = new List<Point>();

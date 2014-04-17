@@ -9,7 +9,6 @@ namespace JPS.Search
     class Node
     {
         public double f;
-        public Option<Node> parent = Option<Node>.None;
         public readonly int x;
         public readonly int y;
         public Point pos
