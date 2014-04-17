@@ -28,6 +28,7 @@ namespace JPS
                 Console.WriteLine(node);
             }
             Console.WriteLine("Finished");
+            Console.ReadLine();
         }
 
         static void runTests()
@@ -35,10 +36,8 @@ namespace JPS
             new TestManager(new List<Test>(new Test[] {
                 new PointTest(),
                 new SearchTest()
-            })).RunAll();
+            })).RunAll(true);
             Console.WriteLine("Done Tests");
-            Console.ReadLine();
-            System.Environment.Exit(0);
         }
 
         

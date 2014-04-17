@@ -7,13 +7,21 @@ using JPS.Data;
 
 namespace JPS.Util
 {
+    class AssertionError : Exception
+    {
+        public AssertionError(string message) : base(message)
+        {
+            
+        }
+    }
+
     static class Utils
     {
         public static void Assert(bool pred, string message)
         {
             if (!pred)
             {
-                throw new Exception(message);
+                throw new AssertionError(message);
             }
         }
         public static List<Point> Bresenham(Point p0, Point p1)

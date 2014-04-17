@@ -20,6 +20,7 @@ namespace JPS.Testing
             testFile(getTests("tests/pos"), c => c > 0);
             testFile(getTests("tests/neg"), c => c == 0);
         }
+
         private List<string> getTests(string folder)
         {
             var result = new List<string>();
@@ -36,6 +37,7 @@ namespace JPS.Testing
                 }
             }
         }
+
         private void testFile(List<string> tests, Func<int, bool> pred)
         {
             tests.ForEach (t => {
@@ -45,6 +47,7 @@ namespace JPS.Testing
                 var array = parsed.Item3;
                 var search = new JumpPointSearch(array, start, end, Heuristics.Euclidean);
                 var path = search.FindPath();
+                array.Print(start, end, x => x, path);
                 Utils.Assert(pred(path.Count), t);
             });
         }

@@ -67,9 +67,9 @@ namespace JPS.Data
         public void Print(Point start, Point end, Func<T,bool> f, List<Point> path)
         {
 
-            foreach (int i in cols.Range())
+            foreach (int j in rows.Range())
             {
-                foreach (int j in rows.Range())
+                foreach (int i in cols.Range())
                 {
                     char c;
                     

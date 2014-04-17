@@ -12,6 +12,7 @@ namespace JPS
         {
             return Enumerable.Range(0, max);
         }
+
         public static Option<T> Some<T>(this T anything)
         {
             return new Option<T>(anything);

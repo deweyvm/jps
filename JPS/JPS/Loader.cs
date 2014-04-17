@@ -23,10 +23,10 @@ namespace JPS
             Point start = parsePoint(lines[0]);
             Point end = parsePoint(lines[1]);
 
-            int cols = lines.Length - 2;
-            int rows = lines[2].Length;
+            int rows = lines.Length - 2;
+            int cols = lines[2].Length;
             var array = Array2d<bool>.Tabulate(cols, rows,
-                (i, j) => lines[i + 2][j] == 'x'
+                (i, j) => lines[j + 2][i] == 'x'
             );
             return Tuple.Create(start, end, array);
 
