@@ -21,6 +21,7 @@ namespace LNP.Data
             if (rep.Count > 0)
             {
                 var result = rep.Min;
+                Console.WriteLine("popping " + result);
                 rep.Remove(result);
                 return result;
             }
@@ -32,6 +33,12 @@ namespace LNP.Data
 
         public void Push(T elt)
         {
+            rep.Add(elt);
+        }
+
+        public void Update(T elt)
+        {
+            rep.Remove(elt);
             rep.Add(elt);
         }
     }

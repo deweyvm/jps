@@ -49,8 +49,10 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Search\Heuristics.cs" />
     <Compile Include="Search\LNPSearch.cs" />
     <Compile Include="Search\Node.cs" />
+    <Compile Include="Util\Util.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="walls.txt">

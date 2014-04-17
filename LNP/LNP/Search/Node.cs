@@ -9,11 +9,16 @@ namespace LNP.Search
     {
         public double f;
         public double g;
+        public double h;
         public bool closed;
         public bool opened;
         public Node parent;
         public readonly int x;
         public readonly int y;
+        public Tuple<int, int> pos
+        {
+            get { return Tuple.Create(x, y); }
+        }
         public Node(int x, int y)
         {
             this.x = x;
@@ -30,6 +35,11 @@ namespace LNP.Search
         public override int GetHashCode()
         {
             return x + y >> 16;
+        }
+
+        public override string ToString()
+        {
+            return String.Format("Node {0},{1}", x, y);
         }
     }
 }

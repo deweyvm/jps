@@ -8,15 +8,24 @@ using System.IO;
 namespace LNP
 {
     using Point = Tuple<int,int>;
+    using LNP.Search;
     class Program
     {
-        
         static void Main(string[] args)
         {
             var parsed = loadMap();
             var start = parsed.Item1;
             var end = parsed.Item2;
             var array = parsed.Item3;
+            var search = new LNPSearch(array, start, end, Heuristics.Euclidean);
+            var path = search.FindPath();
+            Console.WriteLine("Printing all nodes:");
+            foreach (var node in path)
+            {
+                Console.WriteLine(node);
+            }
+            Console.WriteLine("Finished");
+            Console.ReadLine();
         }
 
         static Point parsePoint(string s) 

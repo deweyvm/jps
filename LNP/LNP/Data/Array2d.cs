@@ -13,14 +13,19 @@ namespace LNP.Data
 
         public T get(int i, int j)
         {
-            if (i < 0 || i > cols - 1 || j < 0 || j > rows - 1)
-            {
-                return raw[i, j];
-            }
-            else
+            if (!InRange(i, j))
             {
                 throw new IndexOutOfRangeException();
             }
+            else
+            {
+                return raw[i, j];
+            }
+        }
+
+        public bool InRange(int i, int j)
+        {
+            return i >= 0 && i <= cols - 1 && j >= 0 && j <= rows - 1;
         }
 
         private Array2d(int cols, int rows, T[,] raw)
