@@ -9,12 +9,12 @@ namespace JPS.Search
 {
     class JumpPointSearch
     {
-        private Array2d<Node> nodes;
         private Array2d<bool> solid;
         private PriorityQueue<Node> openList;
         private HashSet<Node> closedList;
         private Dictionary<Node, double> gscore;
         private Dictionary<Node, Node> parentMap;
+        private Dictionary<Point, Node> nodes;
         private Func<Point,Point, double> heuristic;
         private Func<int, int, Point> p = (i, j) => new Point(i, j);
         private Node endNode;
@@ -46,9 +46,9 @@ namespace JPS.Search
         {
             this.solid = solid;
             this.heuristic = heuristic;
-            this.nodes = solid.Map((i, j, b) => new Node(i, j));
-            var startNode = nodes.get(start.x, start.y);
-            this.endNode = nodes.get(end.x, end.y);
+            this.nodes = new Dictionary<Point, Node>();
+            var startNode = nodes.GetOrElse(start, new Node(start.x, start.y));
+            this.endNode =  nodes.GetOrElse(end, new Node(end.x, end.y));
 
             this.openList = new PriorityQueue<Node>(new NodeComparer());
             this.closedList = new HashSet<Node>();
@@ -87,7 +87,7 @@ namespace JPS.Search
                 {
                     var jx = point.x;
                     var jy = point.y;
-                    var jumpNode = nodes.get(jx, jy);
+                    var jumpNode = nodes.GetOrElse(point, new Node(jx, jy));
                     if (!closedList.Contains(jumpNode))
                     {
                         var d = Heuristics.Euclidean(node.pos, jumpNode.pos);
@@ -99,16 +99,7 @@ namespace JPS.Search
                             gscore[jumpNode] = ng;
                             jumpNode.f = ng + heuristic(jumpNode.pos, endNode.pos);
                             parentMap[jumpNode] = node;
-
-                            if (!inOpen)
-                            {
-                                openList.Push(jumpNode);
-                            }
-                            else
-                            {
-                                //todo, always call update
-                                openList.Update(jumpNode);
-                            }
+                            openList.Push(jumpNode);
                         }
                     }
                 });
