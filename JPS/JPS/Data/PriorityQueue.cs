@@ -30,6 +30,20 @@ namespace JPS.Data
             }
         }
 
+        public Option<T> Find(Func<T, bool> pred)
+        {
+            var found = rep.Where(pred);
+            if (found.Count() == 0)
+            {
+                return Option<T>.None;
+            }
+            else
+            {
+                return found.First().Some();
+            }
+
+        }
+
         public void Push(T elt)
         {
             rep.Add(elt);
