@@ -8,15 +8,11 @@ namespace JPS.Search
 {
     class Node
     {
-        public double g;
         public double h;
+        public double f;
         public Option<Node> parent = Option<Node>.None;
         public readonly int x;
         public readonly int y;
-        public double f
-        {
-            get { return g + h; }
-        }
         public Point pos
         {
             get { return new Point(x, y); }

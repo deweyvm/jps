@@ -13,6 +13,7 @@ namespace JPS.Search
         private Array2d<bool> solid;
         private PriorityQueue<Node> openList;
         private HashSet<Node> closedList;
+        private Dictionary<Node, double> gscore;
         private Func<Point,Point, double> heuristic;
         private Func<int, int, Point> p = (i, j) => new Point(i, j);
         private Node endNode;
@@ -50,6 +51,7 @@ namespace JPS.Search
 
             this.openList = new PriorityQueue<Node>(new NodeComparer());
             this.closedList = new HashSet<Node>();
+            this.gscore = new Dictionary<Node, double>();
             openList.Push(startNode);
 
 
@@ -87,12 +89,13 @@ namespace JPS.Search
                     if (!closedList.Contains(jumpNode))
                     {
                         var d = Heuristics.Euclidean(node.pos, jumpNode.pos);
-                        var ng = node.g + d;
+                        var g = gscore.GetOrElse(node, 0);
+                        var ng = g + d;
                         var inOpen = openList.Contains(jumpNode);
-                        if (!inOpen || ng < jumpNode.g)
+                        if (!inOpen || ng < g)
                         {
-                            jumpNode.g = ng;
-                            jumpNode.h = heuristic(jumpNode.pos, endNode.pos);
+                            gscore[jumpNode] = ng;
+                            jumpNode.f = ng + heuristic(jumpNode.pos, endNode.pos);
                             jumpNode.parent = node.Some();
 
                             if (!inOpen)

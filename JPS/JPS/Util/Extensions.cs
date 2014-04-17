@@ -17,5 +17,16 @@ namespace JPS
         {
             return new Option<T>(anything);
         }
+
+
+
+        public static T GetOrElse<K, T>(this IDictionary<K, T> dict, K key, T t)
+        {
+            if (!dict.ContainsKey(key))
+            {
+                dict[key] = t;
+            }
+            return dict[key];
+        }
     }
 }
