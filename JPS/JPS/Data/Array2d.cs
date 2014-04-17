@@ -64,7 +64,7 @@ namespace JPS.Data
             return new Array2d<T>(cols, rows, raw);
         }
 
-        public void Print(Point start, Point end, Func<T,bool> f, List<Point> path)
+        public void Print(Point start, Point end, Func<T, bool> f, Option<List<Point>> path)
         {
 
             foreach (int j in rows.Range())
@@ -81,7 +81,7 @@ namespace JPS.Data
                     {
                         c = 'F';
                     }
-                    else if (path.Contains(new Point(i, j)))
+                    else if (path.Exists(p => p.Contains(new Point(i, j))))
                     {
                         c = 'O';
                     }

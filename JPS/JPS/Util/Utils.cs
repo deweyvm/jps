@@ -19,10 +19,7 @@ namespace JPS.Util
     {
         public static void Assert(bool pred, string message)
         {
-            if (!pred)
-            {
-                throw new AssertionError(message);
-            }
+            if (!pred) throw new AssertionError(message);
         }
         public static List<Point> Bresenham(Point p0, Point p1)
         {

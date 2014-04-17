@@ -14,20 +14,6 @@ namespace JPS
         static void Main(string[] args)
         {
             runTests();
-            var parsed = Loader.LoadWalls("walls.txt");//loadMap();
-            var start = parsed.Item1;
-            var end = parsed.Item2;
-            var array = parsed.Item3;
-            var search = new JumpPointSearch(array, start, end, Heuristics.Euclidean);
-            var path = search.FindPath();
-
-            array.Print(start, end, x => x, path);
-            Console.WriteLine("Printing all nodes:");
-            foreach (var node in path)
-            {
-                Console.WriteLine(node);
-            }
-            Console.WriteLine("Finished");
             Console.ReadLine();
         }
 

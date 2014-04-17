@@ -13,7 +13,7 @@ namespace JPS.Search
         public double h;
         public bool closed;
         public bool opened;
-        public Node parent;
+        public Option<Node> parent = Option<Node>.None;
         public readonly int x;
         public readonly int y;
         public Point pos

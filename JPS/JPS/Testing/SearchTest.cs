@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using JPS.Util;
 using JPS.Search;
+using JPS.Data;
 
 namespace JPS.Testing
 {
@@ -17,8 +18,8 @@ namespace JPS.Testing
 
         public void Run()
         {
-            testFile(getTests("tests/pos"), c => c > 0);
-            testFile(getTests("tests/neg"), c => c == 0);
+            testFile(getTests("tests/pos"), c => c.HasValue);
+            testFile(getTests("tests/neg"), c => !c.HasValue);
         }
 
         private List<string> getTests(string folder)
@@ -38,9 +39,10 @@ namespace JPS.Testing
             }
         }
 
-        private void testFile(List<string> tests, Func<int, bool> pred)
+        private void testFile(List<string> tests, Func<Option<List<Point>>, bool> pred)
         {
             tests.ForEach (t => {
+                //todo: make sure path doesnt hit any impassable blocks and that it actually validly leads from one tile to an adjacent tile
                 var parsed = Loader.LoadWalls(t);
                 var start = parsed.Item1;
                 var end = parsed.Item2;
@@ -48,7 +50,9 @@ namespace JPS.Testing
                 var search = new JumpPointSearch(array, start, end, Heuristics.Euclidean);
                 var path = search.FindPath();
                 array.Print(start, end, x => x, path);
-                Utils.Assert(pred(path.Count), t);
+                
+                Console.WriteLine("--------------------------------------");
+                Utils.Assert(pred(path), t);
             });
         }
     }
