@@ -8,7 +8,6 @@ namespace JPS.Search
 {
     class Node
     {
-        public double h;
         public double f;
         public Option<Node> parent = Option<Node>.None;
         public readonly int x;
