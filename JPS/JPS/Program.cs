@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using LNP.Data;
+using JPS.Data;
 using System.IO;
 
-namespace LNP
+namespace JPS
 {
     using Point = Tuple<int,int>;
-    using LNP.Search;
+    using JPS.Search;
     class Program
     {
         static void Main(string[] args)
@@ -17,7 +17,7 @@ namespace LNP
             var start = parsed.Item1;
             var end = parsed.Item2;
             var array = parsed.Item3;
-            var search = new LNPSearch(array, start, end, Heuristics.Euclidean);
+            var search = new JumpPointSearch(array, start, end, Heuristics.Euclidean);
             var path = search.FindPath();
             Console.WriteLine("Printing all nodes:");
             foreach (var node in path)

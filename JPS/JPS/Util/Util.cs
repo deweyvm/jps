@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace LNP.Util
+namespace JPS.Util
 {
     using Point = Tuple<int,int>;
-    using LNP.Search;
+    using JPS.Search;
     static class Util
     {
         public static List<Point> Bresenham(Point p0, Point p1)

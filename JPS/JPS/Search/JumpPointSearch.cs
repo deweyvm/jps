@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
-using LNP.Data;
+using JPS.Data;
 
-namespace LNP.Search
+namespace JPS.Search
 {
     using Point = Tuple<int, int>;
     using System.Collections.Generic;
-    using LNP.Util;
-    class LNPSearch
+    using JPS.Util;
+    class JumpPointSearch
     {
         private Array2d<Node> nodes;
         private Array2d<bool> solid;
@@ -37,7 +37,7 @@ namespace LNP.Search
             return result.Select(x => x.pos).ToList();
         }
         
-        public LNPSearch(Array2d<bool> solid, Point start, Point end, Func<Point,Point, double> heuristic)
+        public JumpPointSearch(Array2d<bool> solid, Point start, Point end, Func<Point,Point, double> heuristic)
         {
             this.solid = solid;
             this.heuristic = heuristic;

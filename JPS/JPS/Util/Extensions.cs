@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using LNP.Data;
+using JPS.Data;
 
-namespace LNP
+namespace JPS
 {
     static class Extensions
     {

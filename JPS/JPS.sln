@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LNP", "LNP\LNP.csproj", "{30F22485-3FB1-4A6C-BA89-C584DA697032}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JPS", "JPS\JPS.csproj", "{30F22485-3FB1-4A6C-BA89-C584DA697032}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace LNP.Search
+namespace JPS.Search
 {
     using Point = Tuple<int, int>;
     static class Heuristics
