@@ -120,37 +120,32 @@ namespace JPS.Search
 
             if (endNode.pos.Equals(new Point(x, y))) return pt;
 
-            if (dx != 0 && dy != 0)
+            if (dx != 0 && dy != 0 && 
+                (isWalkable(x - dx, y + dy) && !isWalkable(x - dx, y)) ||
+                (isWalkable(x + dx, y - dy) && !isWalkable(x, y - dy)))
             {
-                if ((isWalkable(x - dx, y + dy) && !isWalkable(x - dx, y)) ||
-                    (isWalkable(x + dx, y - dy) && !isWalkable(x, y - dy)))
-                {
-                    return pt;
-                }
+                return pt;
             }
-            else
+            else if(dx != 0 &&
+                   (isWalkable(x + dx, y + 1) && !isWalkable(x, y + 1)) ||
+                   (isWalkable(x + dx, y - 1) && !isWalkable(x, y - 1))) 
             {
-                if(dx != 0) 
-                { 
-                    if((isWalkable(x + dx, y + 1) && !isWalkable(x, y + 1)) ||
-                        (isWalkable(x + dx, y - 1) && !isWalkable(x, y - 1))) 
-                    {
-                        return pt;
-                    }
-                }
-                else if ((isWalkable(x + 1, y + dy) && !isWalkable(x + 1, y)) ||
-                         (isWalkable(x - 1, y + dy) && !isWalkable(x - 1, y))) 
-                {
-                    return pt;
-                }
+                return pt;
+            }
+            
+            else if ((isWalkable(x + 1, y + dy) && !isWalkable(x + 1, y)) ||
+                     (isWalkable(x - 1, y + dy) && !isWalkable(x - 1, y))) 
+            {
+                return pt;
+            }
                 
-            }
+            
             
 
             if (dx != 0 && dy != 0) {
                 var jx = jump(x + dx, y, x, y);
                 var jy = jump(x, y + dy, x, y);
-                if (!jx.HasValue|| !jy.HasValue) {
+                if (!jx.HasValue || !jy.HasValue) {
                     return pt;
                 }
             }
