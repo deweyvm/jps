@@ -18,8 +18,14 @@ namespace JPS.Testing
 
         public void Run()
         {
-            testFile(getTests("tests/pos"), c => c.HasValue);
-            testFile(getTests("tests/neg"), c => !c.HasValue);
+            testFiles(getTests("tests/pos"), (c, start, end, solid) => c.Exists(path => {
+                var reachesEnd = 
+                    path.Count == 0 || 
+                    (path[0].Equals(start) && path[path.Count - 1].Equals(end));
+                var clearPath = path.All(p => !solid.get(p.x, p.y));
+                return reachesEnd && clearPath;
+            }));
+            testFiles(getTests("tests/neg"), (c, start, end, solid) => !c.HasValue);
         }
 
         private List<string> getTests(string folder)
@@ -39,7 +45,7 @@ namespace JPS.Testing
             }
         }
 
-        private void testFile(List<string> tests, Func<Option<List<Point>>, bool> pred)
+        private void testFiles(List<string> tests, Func<Option<List<Point>>, Point, Point, Array2d<bool>, bool> pred)
         {
             tests.ForEach (t => {
                 //todo: make sure path doesnt hit any impassable blocks and that it actually validly leads from one tile to an adjacent tile
@@ -52,7 +58,7 @@ namespace JPS.Testing
                 array.Print(start, end, x => x, path);
                 
                 Console.WriteLine("--------------------------------------");
-                Utils.Assert(pred(path), t);
+                Utils.Assert(pred(path, start, end, array), t);
             });
         }
     }

@@ -91,7 +91,6 @@ namespace JPS.Search
                         {
                             jumpNode.g = ng;
                             jumpNode.h = heuristic(jumpNode.pos, endNode.pos);
-                            jumpNode.f = jumpNode.g + jumpNode.h;
                             jumpNode.parent = node.Some();
 
                             if (!jumpNode.opened)

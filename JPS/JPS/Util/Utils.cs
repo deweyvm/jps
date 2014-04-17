@@ -77,7 +77,11 @@ namespace JPS.Util
                 var interpolated = Bresenham(p0, p1);
                 expanded.Add(interpolated.Take(interpolated.Count - 1).ToList());
             }
-            return expanded.SelectMany(x => x).ToList();
+
+            var result = expanded.SelectMany(x => x).ToList();
+            result.Add(path[path.Count - 1]);
+            result.Reverse();
+            return result.ToList();
         }
     }
 }

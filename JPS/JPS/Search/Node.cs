@@ -8,7 +8,6 @@ namespace JPS.Search
 {
     class Node
     {
-        public double f;
         public double g;
         public double h;
         public bool closed;
@@ -16,6 +15,10 @@ namespace JPS.Search
         public Option<Node> parent = Option<Node>.None;
         public readonly int x;
         public readonly int y;
+        public double f
+        {
+            get { return g + h; }
+        }
         public Point pos
         {
             get { return new Point(x, y); }
