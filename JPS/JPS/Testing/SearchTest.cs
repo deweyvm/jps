@@ -48,7 +48,6 @@ namespace JPS.Testing
         private void testFiles(List<string> tests, Func<Option<List<Point>>, Point, Point, Array2d<bool>, bool> pred)
         {
             tests.ForEach (t => {
-                //todo: make sure path doesnt hit any impassable blocks and that it actually validly leads from one tile to an adjacent tile
                 var parsed = Loader.LoadWalls(t);
                 var start = parsed.Item1;
                 var end = parsed.Item2;
