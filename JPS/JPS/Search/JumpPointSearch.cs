@@ -2,19 +2,18 @@
 using System.Linq;
 using System.Text;
 using JPS.Data;
+using System.Collections.Generic;
+using JPS.Util;
 
 namespace JPS.Search
 {
-    using Point = Tuple<int, int>;
-    using System.Collections.Generic;
-    using JPS.Util;
     class JumpPointSearch
     {
         private Array2d<Node> nodes;
         private Array2d<bool> solid;
         private PriorityQueue<Node> openList;
         private Func<Point,Point, double> heuristic;
-        private Func<int, int, Tuple<int, int>> t = (i, j) => Tuple.Create(i, j);
+        private Func<int, int, Point> p = (i, j) => new Point(i, j);
         private Node endNode;
         class NodeComparer : System.Collections.Generic.IComparer<Node> 
         {
@@ -42,8 +41,8 @@ namespace JPS.Search
             this.solid = solid;
             this.heuristic = heuristic;
             this.nodes = solid.Map((i, j, b) => new Node(i, j));
-            var startNode = nodes.get(start.Item1, start.Item2);
-            this.endNode = nodes.get(end.Item1, end.Item2);
+            var startNode = nodes.get(start.x, start.y);
+            this.endNode = nodes.get(end.x, end.y);
 
             this.openList = new PriorityQueue<Node>(new NodeComparer());
             openList.Push(startNode);
@@ -62,7 +61,7 @@ namespace JPS.Search
 
                 if (node == endNode)
                 {
-                    return Util.ExpandPath(retracePath(endNode));
+                    return Util.Util.ExpandPath(retracePath(endNode));
                 }
                 identifySuccessors(node);
 
@@ -79,11 +78,11 @@ namespace JPS.Search
             Console.WriteLine(neighbors.Count);
             foreach (var n in neighbors) 
             {
-                var jumpPoint = jump(n.Item1, n.Item2, x, y);
+                var jumpPoint = jump(n.x, n.y, x, y);
                 if (jumpPoint != null)
                 {
-                    var jx = jumpPoint.Item1;
-                    var jy = jumpPoint.Item2;
+                    var jx = jumpPoint.x;
+                    var jy = jumpPoint.y;
                     var jumpNode = nodes.get(jx, jy);
                     if (jumpNode.closed) continue;
 
@@ -92,7 +91,7 @@ namespace JPS.Search
                     if (!jumpNode.opened || ng < jumpNode.g)
                     {
                         jumpNode.g = ng;
-                        jumpNode.h =/* jumpNode.h ||*/ heuristic(jumpNode.pos, endNode.pos);
+                        jumpNode.h = heuristic(jumpNode.pos, endNode.pos);
                         jumpNode.f = jumpNode.g + jumpNode.h;
                         jumpNode.parent = node;
 
@@ -112,42 +111,46 @@ namespace JPS.Search
 
         private bool isWalkable(int i, int j)
         {
-            if (solid.InRange(i, j))
-            {
-                return !solid.get(i, j);
-            }
-            else
-            {
-                return false;
-            }
+            return solid.InRange(i, j) && !solid.get(i, j);
         }
 
         private Point jump(int x, int y, int px, int py)
         {
             var dx = x - px;
-            
             var dy = y - py;
-            var pt = t(x, y);
+            var pt = p(x, y);
             if (!isWalkable(x, y)) return null;
 
-            if (nodes.get(x, y).Equals(endNode)) return pt;
+            if (nodes.get(x, y).pos.Equals(endNode.pos)) return pt;
 
             if (dx != 0 && dy != 0)
             {
                 if ((isWalkable(x - dx, y + dy) && !isWalkable(x - dx, y)) ||
-                     (isWalkable(x + dx, y - dy) && !isWalkable(x, y - dy)))
+                    (isWalkable(x + dx, y - dy) && !isWalkable(x, y - dy)))
                 {
                     return pt;
                 }
-                else
+            }
+            else
+            {
+                if(dx != 0) 
+                { 
+                    if((isWalkable(x + dx, y + 1) && !isWalkable(x, y + 1)) ||
+                        (isWalkable(x + dx, y - 1) && !isWalkable(x, y - 1))) 
+                    {
+                        return pt;
+                    }
+                }
+                else 
                 {
-                    if ((isWalkable(x + 1, y + dy) && !isWalkable(x + 1, y)) ||
-                       (isWalkable(x - 1, y + dy) && !isWalkable(x - 1, y))) 
+                    if((isWalkable(x + 1, y + dy) && !isWalkable(x + 1, y)) ||
+                        (isWalkable(x - 1, y + dy) && !isWalkable(x - 1, y))) 
                     {
                         return pt;
                     }
                 }
             }
+            
 
             if (dx != 0 && dy != 0) {
                 var jx = jump(x + dx, y, x, y);
@@ -168,7 +171,7 @@ namespace JPS.Search
             var x = node.x;
             var y = node.y;
             var neighbors = new List<Point>();
-            Func<int, int, Tuple<int, int>> t = (i, j) => Tuple.Create(i, j);
+            Func<int, int, Point> p = (i, j) => new Point(i, j);
             if (parent != null)
             {
                 var px = parent.x;
@@ -177,24 +180,25 @@ namespace JPS.Search
                 var dy = (y - py) / Math.Max(Math.Abs(y - py), 1);
                 if (dx != 0 && dy != 0)
                 {
-                    if (isWalkable(x, y + dy)) {
-                        neighbors.Add(t(x, y + dy));
+                    if (isWalkable(x, y + dy)) 
+                    {
+                        neighbors.Add(p(x, y + dy));
                     }
                     if (isWalkable(x + dx, y))
                     {
-                        neighbors.Add(t(x + dx, y));
+                        neighbors.Add(p(x + dx, y));
                     }
                     if (isWalkable(x, y + dy) || isWalkable(x + dx, y))
                     {
-                        neighbors.Add(t(x + dx, y + dy));
+                        neighbors.Add(p(x + dx, y + dy));
                     }
                     if (!isWalkable(x - dx, y) && isWalkable(x, y + dy))
                     {
-                        neighbors.Add(t(x - dx, y + dy));
+                        neighbors.Add(p(x - dx, y + dy));
                     }
                     if (!isWalkable(x, y - dy) && isWalkable(x + dx, y))
                     {
-                        neighbors.Add(t(x + dx, y - dy));
+                        neighbors.Add(p(x + dx, y - dy));
                     }
                 }
                 else
@@ -205,15 +209,15 @@ namespace JPS.Search
                         {
                             if (isWalkable(x, y + dy))
                             {
-                                neighbors.Add(t(x, y + dy));
+                                neighbors.Add(p(x, y + dy));
                             }
                             if (!isWalkable(x + 1, y))
                             {
-                                neighbors.Add(t(x + 1, y + dy));
+                                neighbors.Add(p(x + 1, y + dy));
                             }
                             if (!isWalkable(x - 1, y))
                             {
-                                neighbors.Add(t(x - 1, y + dy));
+                                neighbors.Add(p(x - 1, y + dy));
                             }
                         }
                     }
@@ -221,13 +225,13 @@ namespace JPS.Search
                     { 
                         if (isWalkable(x + dx, y)) {
                             if (isWalkable(x + dx, y)) {
-                                neighbors.Add(t(x + dx, y));
+                                neighbors.Add(p(x + dx, y));
                             }
                             if (!isWalkable(x, y + 1)) {
-                                neighbors.Add(t(x + dx, y + 1));
+                                neighbors.Add(p(x + dx, y + 1));
                             }
                             if (!isWalkable(x, y - 1)) {
-                                neighbors.Add(t(x + dx, y - 1));
+                                neighbors.Add(p(x + dx, y - 1));
                             }
                         }
                     }
@@ -235,13 +239,14 @@ namespace JPS.Search
             }
             else
             {
+                Console.WriteLine("here");
                 for (int i = -1; i <= 1; i += 1) 
                 {
                     for (int j = -1; j <= 1; j += 1)
                     {
                         if (!(i == 0 && j == 0))
                         {
-                            neighbors.Add(t(x + i, y + j));
+                            neighbors.Add(p(x + i, y + j));
                         }
                     }
                 }

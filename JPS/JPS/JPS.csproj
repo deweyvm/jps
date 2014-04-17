@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Data\Array2d.cs" />
     <Compile Include="Data\Option.cs" />
+    <Compile Include="Data\Point.cs" />
     <Compile Include="Data\PriorityQueue.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

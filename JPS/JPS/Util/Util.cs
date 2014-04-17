@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using JPS.Search;
+using JPS.Data;
 
 namespace JPS.Util
 {
-    using Point = Tuple<int,int>;
-    using JPS.Search;
     static class Util
     {
         public static List<Point> Bresenham(Point p0, Point p1)
@@ -14,10 +14,10 @@ namespace JPS.Util
             var limit = Heuristics.Manhattan(p0, p1);
             Console.WriteLine(limit);
             var line = new List<Point>();
-            var x0 = p0.Item1;
-            var y0 = p0.Item2;
-            var x1 = p1.Item1;
-            var y1 = p1.Item2;
+            var x0 = p0.x;
+            var y0 = p0.y;
+            var x1 = p1.x;
+            var y1 = p1.y;
 
             var dx = Math.Abs(x1 - x0);
             var dy = Math.Abs(y1 - y0);
@@ -32,7 +32,7 @@ namespace JPS.Util
 
             for (int p = 0; p < limit + 10; p += 1)
             {
-                line.Add(Tuple.Create(x, y));
+                line.Add(new Point(x, y));
 
                 if (x == x1 && y == y1)
                 {
@@ -70,7 +70,7 @@ namespace JPS.Util
                 var p0 = path[k];
                 var p1 = path[k + 1];
                 var interpolated = Bresenham(p0, p1);
-                expanded.Add(interpolated);
+                expanded.Add(interpolated.Take(interpolated.Count - 1).ToList());
             }
             //expanded.Add(new List<Point>(path[path.Count - 1]));
             return expanded.SelectMany(x => x).ToList();

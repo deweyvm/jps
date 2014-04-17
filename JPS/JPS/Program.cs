@@ -7,7 +7,6 @@ using System.IO;
 
 namespace JPS
 {
-    using Point = Tuple<int,int>;
     using JPS.Search;
     class Program
     {
@@ -19,6 +18,8 @@ namespace JPS
             var array = parsed.Item3;
             var search = new JumpPointSearch(array, start, end, Heuristics.Euclidean);
             var path = search.FindPath();
+
+            array.Print(start, end, x => x, path);
             Console.WriteLine("Printing all nodes:");
             foreach (var node in path)
             {
@@ -33,7 +34,7 @@ namespace JPS
             String[] pts = s.Split(',');
             int x = int.Parse(pts[0]);
             int y = int.Parse(pts[1]);
-            return Tuple.Create(x, y);
+            return new Point(x, y);
         }
 
         static Tuple<Point,Point,Array2d<bool>> loadMap()
@@ -44,10 +45,10 @@ namespace JPS
                 Point start = parsePoint(lines[0]);
                 Point end = parsePoint(lines[1]);
                 
-                int rows = lines.Length - 2;
-                int cols = lines[2].Length;
+                int cols = lines.Length - 2;
+                int rows = lines[2].Length;
                 var array = Array2d<bool>.Tabulate(cols, rows, 
-                    (i, j) => lines[j + 2][i] == 'x'
+                    (i, j) => lines[i + 2][j] == 'x'
                 );
                 return Tuple.Create(start, end, array);
             
