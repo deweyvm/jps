@@ -5,6 +5,9 @@ using System.Text;
 
 namespace JPS.Data
 {
+    /// <summary>
+    /// A two dimensional integer point.
+    /// </summary>
     class Point
     {
         public readonly int x;

@@ -6,6 +6,9 @@ using JPS.Data;
 
 namespace JPS.Search
 {
+    /// <summary>
+    /// Priority queue node containing a position and f score.
+    /// </summary>
     class Node
     {
         public double f;

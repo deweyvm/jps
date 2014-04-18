@@ -17,10 +17,20 @@ namespace JPS.Util
 
     static class Utils
     {
+        /// <summary>
+        /// An assertion which raises an exception rather than 
+        /// opening a pop-up window.
+        /// </summary>
+        /// <param name="pred"></param>
+        /// <param name="message"></param>
         public static void Assert(bool pred, string message)
         {
             if (!pred) throw new AssertionError(message);
         }
+
+        /// <summary>
+        /// Traces from p0 to p1 using Bresenham's line algorithm.
+        /// </summary>
         public static List<Point> Bresenham(Point p0, Point p1)
         {
             var limit = Heuristics.Manhattan(p0, p1);

@@ -6,6 +6,9 @@ using JPS.Data;
 
 namespace JPS.Search
 {
+    /// <summary>
+    /// Contains different search heuristics.
+    /// </summary>
     static class Heuristics
     {
         public static double Euclidean(Point p0, Point p1)

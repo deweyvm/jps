@@ -9,6 +9,9 @@ namespace JPS
 {
     class Loader
     {
+        /// <summary>
+        /// Parses a point from a comma separated list of ints.
+        /// </summary>
         static Point parsePoint(string s)
         {
             String[] pts = s.Split(',');
@@ -17,6 +20,9 @@ namespace JPS
             return new Point(x, y);
         }
 
+        /// <summary>
+        /// Loads a wall file into a (start, end, solid) tuple.
+        /// </summary>
         public static Tuple<Point, Point, Array2d<bool>> LoadWalls(string filepath)
         {
             var lines = File.ReadAllLines(filepath);

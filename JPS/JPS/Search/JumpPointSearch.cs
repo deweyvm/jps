@@ -7,6 +7,10 @@ using JPS.Util;
 
 namespace JPS.Search
 {
+    /// <summary>
+    /// Provides an optimization over a traditional A* search by jumping multiple tiles
+    /// in clear areas while pathfinding in a uniform grid.
+    /// </summary>
     class JumpPointSearch
     {
         private Array2d<bool> solid;
@@ -17,6 +21,7 @@ namespace JPS.Search
         private Dictionary<Point, Node> nodes;
         private Func<Point,Point, double> heuristic;
         private Func<int, int, Point> p = (i, j) => new Point(i, j);
+        private Node startNode;
         private Node endNode;
         class NodeComparer : IComparer<Node> 
         {
@@ -26,7 +31,7 @@ namespace JPS.Search
             }
         }
 
-        private List<Point> retracePath(Node end)
+        private static List<Point> retracePath(Node end, Dictionary<Point, Point> parentMap)
         {
             var result = new List<Point>();
             var current = end.pos.Some();
@@ -47,20 +52,18 @@ namespace JPS.Search
             this.solid = solid;
             this.heuristic = heuristic;
             this.nodes = new Dictionary<Point, Node>();
-            var startNode = nodes.GetOrElse(start, new Node(start.x, start.y));
+            this.startNode = nodes.GetOrElse(start, new Node(start.x, start.y));
             this.endNode =  nodes.GetOrElse(end, new Node(end.x, end.y));
 
             this.openList = new PriorityQueue<Node>(new NodeComparer());
             this.closedList = new HashSet<Node>();
             this.gscore = new Dictionary<Node, double>();
             this.parentMap = new Dictionary<Point, Point>();
-            openList.Push(startNode);
-
-
         }
 
         public Option<List<Point>> FindPath()
         {
+            openList.Push(startNode);
             while (!openList.IsEmpty())
             {
                 var node = openList.Pop();
@@ -68,15 +71,14 @@ namespace JPS.Search
 
                 if (node.Equals(endNode))
                 {
-                    return Utils.ExpandPath(retracePath(endNode)).Some();
+                    return Utils.ExpandPath(retracePath(endNode, parentMap)).Some();
                 }
                 identifySuccessors(node);
             }
             return Option<List<Point>>.None;
         }
 
-        //(parentMap, openSet, gscore) -> (parentMap, openSet, gscore)
-        private /*Dictionary<Point, Point>PriorityQueue<Node>,*/  void identifySuccessors(Node node)
+        private void identifySuccessors(Node node)
         {
             var x = node.x;
             var y = node.y;
@@ -122,14 +124,14 @@ namespace JPS.Search
             if (endNode.pos.Equals(new Point(x, y))) return pt;
 
             if (dx != 0 && dy != 0 && 
-                (isWalkable(x - dx, y + dy) && !isWalkable(x - dx, y)) ||
-                (isWalkable(x + dx, y - dy) && !isWalkable(x, y - dy)))
+                ((isWalkable(x - dx, y + dy) && !isWalkable(x - dx, y)) ||
+                (isWalkable(x + dx, y - dy) && !isWalkable(x, y - dy))))
             {
                 return pt;
             }
             else if(dx != 0 &&
-                   (isWalkable(x + dx, y + 1) && !isWalkable(x, y + 1)) ||
-                   (isWalkable(x + dx, y - 1) && !isWalkable(x, y - 1))) 
+                   ((isWalkable(x + dx, y + 1) && !isWalkable(x, y + 1)) ||
+                   (isWalkable(x + dx, y - 1) && !isWalkable(x, y - 1)))) 
             {
                 return pt;
             }
@@ -139,9 +141,6 @@ namespace JPS.Search
             {
                 return pt;
             }
-                
-            
-            
 
             if (dx != 0 && dy != 0) {
                 var jx = jump(x + dx, y, x, y);
@@ -177,16 +176,11 @@ namespace JPS.Search
             var parent = parentMap.TryGet(node.pos);
             var x = node.x;
             var y = node.y;
-            var neighbors = new List<Point>();
             Func<int, int, Point> p = (i, j) => new Point(i, j);
-            if (!parent.HasValue)
-            {
-                
-                return getNeighbors8(node.pos);
-            }
 
-            parent.ForEach(par =>
+            return parent.Map(par =>
             {
+                var neighbors = new List<Point>();
                 var px = par.x;
                 var py = par.y;
                 var dx = (x - px) / Math.Max(Math.Abs(x - px), 1);
@@ -238,10 +232,9 @@ namespace JPS.Search
                         neighbors.Add(p(x + dx, y - 1));
                     }
                 }
-
+                return neighbors;
                 
-            });
-            return neighbors;
+            }).GetOrElse(getNeighbors8(node.pos));
         }
     }
 }

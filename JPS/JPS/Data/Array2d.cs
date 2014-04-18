@@ -5,12 +5,20 @@ using System.Text;
 
 namespace JPS.Data
 {
+    /// <summary>
+    /// A wrapper for a two dimensional array.
+    /// </summary>
+    /// <typeparam name="T">The type of the contained element.</typeparam>
     class Array2d<T>
     {
         public readonly int cols;
         public readonly int rows;
         private T[,] raw;
 
+        /// <summary>
+        /// Get an element at the given index. 
+        /// Throws an exception if the indices are not in range.
+        /// </summary>
         public T get(int i, int j)
         {
             if (!InRange(i, j))
@@ -23,6 +31,9 @@ namespace JPS.Data
             }
         }
 
+        /// <summary>
+        /// Returns true if the given indices are within the bounds of the array.
+        /// </summary>
         public bool InRange(int i, int j)
         {
             return i >= 0 && i <= cols - 1 && j >= 0 && j <= rows - 1;
@@ -35,11 +46,17 @@ namespace JPS.Data
             this.raw = raw;
         }
 
+        /// <summary>
+        /// Create a new Array2d by applying f to each element and index in `this`.
+        /// </summary>
         public Array2d<K> Map<K>(Func<int, int, T, K> f)
         {
             return Tabulate<K>(cols, rows, (i, j) => f(i, j, get(i, j)));
         }
 
+        /// <summary>
+        /// Perform an action on each element and its index.
+        /// </summary>
         public void ForEach(Action<int, int, T> f)
         {
             foreach (int i in cols.Range())
@@ -51,6 +68,17 @@ namespace JPS.Data
             }
         }
 
+        /// <summary>
+        /// Create a new Array2d from a raw 2d array.
+        /// </summary>
+        public static Array2d<T> FromArray<T>(int cols, int rows, T[,] elts)
+        {
+            return new Array2d<T>(cols, rows, elts);
+        }
+
+        /// <summary>
+        /// Create a new Array2d from a generating function.
+        /// </summary>
         public static Array2d<T> Tabulate<T>(int cols, int rows, Func<int, int, T> f)
         {
             T[,] raw = new T[cols,rows];
@@ -64,6 +92,13 @@ namespace JPS.Data
             return new Array2d<T>(cols, rows, raw);
         }
 
+        /// <summary>
+        /// Print the current array and path.
+        /// </summary>
+        /// <param name="start">The start node.</param>
+        /// <param name="end">The end node.</param>
+        /// <param name="f">Whether or not an element is "solid".</param>
+        /// <param name="path">The path from start to end or None.</param>
         public void Print(Point start, Point end, Func<T, bool> f, Option<List<Point>> path)
         {
 
