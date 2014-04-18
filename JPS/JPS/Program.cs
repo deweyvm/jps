@@ -19,10 +19,10 @@ namespace JPS
 
         static void runTests()
         {
-            new TestManager(new List<Test>(new Test[] {
+            new TestManager(new Test[] {
                 new PointTest(),
                 new SearchTest()
-            })).RunAll(true);
+            }.ToList()).RunAll(true);
             Console.WriteLine("Done Tests");
         }
 

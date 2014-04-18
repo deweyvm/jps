@@ -76,6 +76,10 @@ namespace JPS.Util
             throw new Exception("programmer error");
         }
 
+        /// <summary>
+        /// Expands a jump-point containing path to a full path where every
+        /// successive point is adjacent to the last.
+        /// </summary>
         public static List<Point> ExpandPath(List<Point> path)
         {
             var expanded = new List<List<Point>>();
