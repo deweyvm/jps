@@ -148,13 +148,13 @@ namespace JPS.Search
                     return pt;
                 }
             }
-            if (isWalkable(x + dx, y) || isWalkable(x, y + dy)) {
+            if (true || isWalkable(x + dx, y) || isWalkable(x, y + dy)) {
                 return jump(x + dx, y + dy, x, y);
             }
             return Option<Point>.None;
         }
 
-        private List<Point> getNeighbors8(Point pt)
+        private List<Point> geneighbors8(Point pt)
         {
             var neighbors = new List<Point>();
             for (int i = -1; i <= 1; i += 1)
@@ -194,46 +194,85 @@ namespace JPS.Search
                     {
                         neighbors.Add(p(x + dx, y));
                     }
-                    if (isWalkable(x, y + dy) || isWalkable(x + dx, y))
+
+                    if (isWalkable(x + dx, y + dy))
                     {
                         neighbors.Add(p(x + dx, y + dy));
                     }
-                    if (!isWalkable(x - dx, y) && isWalkable(x, y + dy))
+
+                    if (isWalkable(x - dx, y + dy) && 
+                        isWalkable(x, y + dy) && 
+                        !isWalkable(x - dx, y))
                     {
                         neighbors.Add(p(x - dx, y + dy));
                     }
-                    if (!isWalkable(x, y - dy) && isWalkable(x + dx, y))
+
+                    if (isWalkable(x + dx, y - dy) && 
+                        isWalkable(x + dx, y) && 
+                        !isWalkable(x, y - dy))
                     {
                         neighbors.Add(p(x + dx, y - dy));
                     }
+
+
                 }
-                else if (dx == 0 && isWalkable(x, y + dy))
+                else if (dx == 0)
                 {
-                    neighbors.Add(p(x, y + dy));
-                    if (!isWalkable(x + 1, y))
+                    if (isWalkable(x, y + dy))
+                    {
+                        neighbors.Add(p(x, y + dy));
+
+                        if (isWalkable(x + 1, y + dy) && !isWalkable(x + 1, y))
+                        {
+                            neighbors.Add(p(x + 1, y + dy));
+                        }
+                        if (isWalkable(x - 1, y + dy) && !isWalkable(x - 1, y))
+                        {
+                            neighbors.Add(p(x - 1, y + dy));
+                        }
+                    }
+
+                    if (isWalkable(x + 1, y + dy) && !isWalkable(x + 1, y))
                     {
                         neighbors.Add(p(x + 1, y + dy));
                     }
-                    if (!isWalkable(x - 1, y))
+                    if (isWalkable(x - 1, y + dy) && !isWalkable(x - 1, y))
                     {
                         neighbors.Add(p(x - 1, y + dy));
                     }
+                            
                 }
-                else if (isWalkable(x + dx, y))
+                else
                 {
-                    neighbors.Add(p(x + dx, y));
-                    if (!isWalkable(x, y + 1))
+                    if (isWalkable(x + dx, y))
+                    {
+                        neighbors.Add(p(x + dx, y));
+
+                        if (isWalkable(x + dx, y + 1) && !isWalkable(x, y + 1))
+                        {
+                            neighbors.Add(p(x + dx, y + 1));
+                        }
+                        if (isWalkable(x + dx, y - 1) && !isWalkable(x, y - 1))
+                        {
+                            neighbors.Add(p(x + dx, y - 1));
+                        }
+                    }
+  
+                    if (isWalkable(x + dx, y + 1) && !isWalkable(x, y + 1))
                     {
                         neighbors.Add(p(x + dx, y + 1));
                     }
-                    if (!isWalkable(x, y - 1))
+                    if (isWalkable(x + dx, y - 1) && !isWalkable(x, y - 1))
                     {
                         neighbors.Add(p(x + dx, y - 1));
                     }
+                            
                 }
+                
+                
                 return neighbors;
                 
-            }).GetOrElse(getNeighbors8(node.pos));
+            }).GetOrElse(geneighbors8(node.pos));
         }
     }
 }

@@ -40,6 +40,7 @@ namespace JPS.Testing
                 }
                 else
                 {
+                    Console.WriteLine(i);
                     return result;
                 }
             }
@@ -48,6 +49,7 @@ namespace JPS.Testing
         private void testFiles(List<string> tests, Func<Option<List<Point>>, Point, Point, Array2d<bool>, bool> pred)
         {
             tests.ForEach (t => {
+                Console.WriteLine(t);
                 var parsed = Loader.LoadWalls(t);
                 var start = parsed.Item1;
                 var end = parsed.Item2;
