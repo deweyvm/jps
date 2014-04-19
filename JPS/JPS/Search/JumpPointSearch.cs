@@ -68,7 +68,6 @@ namespace JPS.Search
             {
                 var node = openList.Pop();
                 closedList.Add(node);
-
                 if (node.Equals(endNode))
                 {
                     return Utils.ExpandPath(retracePath(endNode, parentMap)).Some();
@@ -129,15 +128,15 @@ namespace JPS.Search
             {
                 return pt;
             }
-            else if(dx != 0 &&
+            if(dx != 0 &&
                    ((isWalkable(x + dx, y + 1) && !isWalkable(x, y + 1)) ||
                    (isWalkable(x + dx, y - 1) && !isWalkable(x, y - 1)))) 
             {
                 return pt;
             }
             
-            else if ((isWalkable(x + 1, y + dy) && !isWalkable(x + 1, y)) ||
-                     (isWalkable(x - 1, y + dy) && !isWalkable(x - 1, y))) 
+            if ((isWalkable(x + 1, y + dy) && !isWalkable(x + 1, y)) ||
+                (isWalkable(x - 1, y + dy) && !isWalkable(x - 1, y))) 
             {
                 return pt;
             }
@@ -145,7 +144,7 @@ namespace JPS.Search
             if (dx != 0 && dy != 0) {
                 var jx = jump(x + dx, y, x, y);
                 var jy = jump(x, y + dy, x, y);
-                if (!jx.HasValue || !jy.HasValue) {
+                if (jx.HasValue || jy.HasValue) {
                     return pt;
                 }
             }

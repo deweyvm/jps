@@ -27,12 +27,12 @@ namespace JPS.Testing
                 catch (AssertionError e)
                 {
                     Console.WriteLine("FAIL: " + t.Name() + ": " + e.Message);
-                    fail = true;
+                    break;
                 }
             }
-            if (fail && fatalFail)
+            if (fail)
             {
-                throw new Exception("Test failure.");
+                Console.WriteLine("Test failure.");
             }
         }
 
