@@ -148,10 +148,9 @@ namespace JPS.Search
                     return pt;
                 }
             }
-            if (true || isWalkable(x + dx, y) || isWalkable(x, y + dy)) {
-                return jump(x + dx, y + dy, x, y);
-            }
-            return Option<Point>.None;
+
+            return jump(x + dx, y + dy, x, y);
+
         }
 
         private List<Point> geneighbors8(Point pt)
