@@ -63,6 +63,7 @@ namespace JPS.Search
 
         public Option<List<Point>> FindPath()
         {
+            var timems = Environment.TickCount;
             openList.Push(startNode);
             while (!openList.IsEmpty())
             {
