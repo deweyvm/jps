@@ -33,14 +33,13 @@ namespace JPS.Testing
             var result = new List<string>();
             for (int i = 0; ; i += 1)
             {
-                var pathname = string.Format("{0}/{1}.txt", folder, i);
+                var pathname = string.Format("{0}/{1:D3}.txt", folder, i);
                 if (File.Exists(pathname))
                 {
                     result.Add(pathname);
                 }
                 else
                 {
-                    Console.WriteLine(i);
                     return result;
                 }
             }
@@ -56,9 +55,9 @@ namespace JPS.Testing
                 var array = parsed.Item3;
                 var search = new JumpPointSearch(array, start, end, Heuristics.Euclidean);
                 var path = search.FindPath();
-                array.Print(start, end, x => x, path);
+                //array.Print(start, end, x => x, path);
                 
-                Console.WriteLine("--------------------------------------");
+                //Console.WriteLine("--------------------------------------");
                 Utils.Assert(pred(path, start, end, array), t);
             });
         }

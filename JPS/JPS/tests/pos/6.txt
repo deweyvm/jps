@@ -1,6 +1,0 @@
-﻿1,2
-2,1
-xxxx
-xx0x
-x0xx
-xxxx
