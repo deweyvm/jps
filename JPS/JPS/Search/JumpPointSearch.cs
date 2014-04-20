@@ -124,13 +124,13 @@ namespace JPS.Search
 
             if (dx != 0 && dy != 0 && 
                 ((isWalkable(x - dx, y + dy) && !isWalkable(x - dx, y)) ||
-                (isWalkable(x + dx, y - dy) && !isWalkable(x, y - dy))))
+                 (isWalkable(x + dx, y - dy) && !isWalkable(x, y - dy))))
             {
                 return pt;
             }
             if(dx != 0 &&
                    ((isWalkable(x + dx, y + 1) && !isWalkable(x, y + 1)) ||
-                   (isWalkable(x + dx, y - 1) && !isWalkable(x, y - 1)))) 
+                    (isWalkable(x + dx, y - 1) && !isWalkable(x, y - 1)))) 
             {
                 return pt;
             }
@@ -200,14 +200,14 @@ namespace JPS.Search
                     }
 
                     if (isWalkable(x - dx, y + dy) && 
-                        isWalkable(x, y + dy) && 
+                        //isWalkable(x, y + dy) && 
                         !isWalkable(x - dx, y))
                     {
                         neighbors.Add(p(x - dx, y + dy));
                     }
 
                     if (isWalkable(x + dx, y - dy) && 
-                        isWalkable(x + dx, y) && 
+                        //isWalkable(x + dx, y) && 
                         !isWalkable(x, y - dy))
                     {
                         neighbors.Add(p(x + dx, y - dy));
